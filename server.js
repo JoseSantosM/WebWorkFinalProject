@@ -33,16 +33,18 @@ CREATE TABLE IF NOT EXISTS judges (
 )`);
 
 db.run(`
-  CREATE TABLE IF NOT EXISTS grades (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    judge TEXT,
-    competitor TEXT,
-    execution INTEGER,
-    choreography INTEGER,
-    creativity INTEGER,
-    interpretation INTEGER,
-    total INTEGER
-  )
+ CREATE TABLE IF NOT EXISTS grades (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  judge TEXT,
+  group_number TEXT,
+  project_title TEXT,
+  criteria1 INTEGER,
+  criteria2 INTEGER,
+  criteria3 INTEGER,
+  criteria4 INTEGER,
+  total INTEGER,
+  comments TEXT
+)
 `);
 
 
@@ -132,4 +134,5 @@ app.get("/admin/data", (req, res) => {
 });
 
 app.listen(3000, () => console.log("Server running on http://localhost:3000"));
+
 
