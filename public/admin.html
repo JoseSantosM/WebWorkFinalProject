@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Admin Results</title>
+<link rel="stylesheet" href="css/styles.css">
+<script>
+async function loadData() {
+  const res = await fetch("/admin/data");
+  const data = await res.json();
+
+  let html = "<table border='1'><tr><th>Judge</th><th>Group</th><th>Total</th><th>Comments</th></tr>";
+
+  let groupScores = {};
+
+  data.forEach(row => {
+    html += `<tr>
+               <td>${row.judge}</td>
+               <td>${row.group_number}</td>
+               <td>${row.total}</td>
+               <td>${row.comments}</td>
+             </tr>`;
+
+    if (!groupScores[row.group_number]) groupScores[row.group_number] = [];
+    groupScores[row.group_number].push(row.total);
+  });
+
+  html += "</table><br>";
+
+  html += "<h3>Group Averages:</h3>";
+
+  for (let g in groupScores) {
+    const avg = groupScores[g].reduce((a,b)=>a+b,0) / groupScores[g].length;
+    html += `Group ${g}: <b>${avg.toFixed(2)}</b><br>`;
+  }
+
+  document.getElementById("results").innerHTML = html;
+}
+</script>
+</head>
+<body onload="loadData()">
+
+<h2>Admin Results</h2>
+<div id="results"></div>
+
+</body>
+</html>

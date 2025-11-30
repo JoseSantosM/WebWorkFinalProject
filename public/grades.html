@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Grade Submission</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<h2>Computer Science Project Grading</h2>
+
+<form method="POST" action="/submitGrades">
+
+<label>Group Number:</label>
+<input type="text" name="group_number" required><br>
+
+<label>Project Title:</label>
+<input type="text" name="project_title" required><br><br>
+
+<table border="1">
+  <tr><th>Criteria</th><th>Developing (0–10)</th><th>Accomplished (11–15)</th></tr>
+
+  <tr>
+    <td>Articulate requirements</td>
+    <td><input type="radio" name="c1" value="10"></td>
+    <td><input type="radio" name="c1" value="15"></td>
+  </tr>
+
+  <tr>
+    <td>Choose appropriate tools</td>
+    <td><input type="radio" name="c2" value="10"></td>
+    <td><input type="radio" name="c2" value="15"></td>
+  </tr>
+
+  <tr>
+    <td>Clear oral presentation</td>
+    <td><input type="radio" name="c3" value="10"></td>
+    <td><input type="radio" name="c3" value="15"></td>
+  </tr>
+
+  <tr>
+    <td>Functioned well as a team</td>
+    <td><input type="radio" name="c4" value="10"></td>
+    <td><input type="radio" name="c4" value="15"></td>
+  </tr>
+</table>
+
+<br>
+<label>Comments:</label><br>
+<textarea name="comments"></textarea><br><br>
+
+<button type="submit">Submit Grades</button>
+</form>
+
+</body>
+</html>
