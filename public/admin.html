@@ -1,58 +1,109 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Admin Results</title>
-<link rel="stylesheet" href="css/styles.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin — Results</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="app-wrap">
+    <div class="card header-row">
+      <div class="header-left">
+        <h1>Admin — Results</h1>
+        <div class="header-sub">Overview of all submitted grades</div>
+      </div>
+      <div style="display:flex; gap:8px;">
+        <a class="btn btn-ghost" href="/grades">Submit Grades</a>
+        <a class="btn btn-danger" href="/logout">Log Out</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <div class="kv">Summary</div>
+          <div class="header-sub">Data auto-refreshes when you reload the page.</div>
+        </div>
+        <div>
+          <button id="refreshBtn" class="btn btn-ghost" onclick="loadData()">Refresh</button>
+        </div>
+      </div>
+
+      <div class="table-wrap card" style="margin-top:14px; padding:12px;">
+        <div id="results">Loading…</div>
+      </div>
+    </div>
+  </div>
+
 <script>
 async function loadData() {
-  const res = await fetch("/admin/data");
-  const data = await res.json();
+  try {
+    const res = await fetch("/admin/data");
+    if(!res.ok) throw new Error('Failed to fetch: ' + res.status);
+    const data = await res.json();
 
-  let html = "<table border='1'><tr><th>Judge</th><th>Group</th><th>Total</th><th>Comments</th></tr>";
+    if (!Array.isArray(data) || data.length === 0) {
+      document.getElementById("results").innerHTML = "<div class='kv'>No grades submitted yet.</div>";
+      return;
+    }
 
-  let groupScores = {};
+    let html = `<table class="table"><thead><tr>
+      <th>Judge</th><th>Group</th><th>Project</th><th>Criteria 1</th>
+      <th>Criteria 2</th><th>Criteria 3</th><th>Criteria 4</th><th>Total</th><th>Comments</th>
+    </tr></thead><tbody>`;
 
-  data.forEach(row => {
-    html += `<tr>
-               <td>${row.judge}</td>
-               <td>${row.group_number}</td>
-               <td>${row.total}</td>
-               <td>${row.comments}</td>
-             </tr>`;
+    const groupScores = {};
 
-    if (!groupScores[row.group_number]) groupScores[row.group_number] = [];
-    groupScores[row.group_number].push(row.total);
-  });
+    data.forEach(row => {
+      html += `<tr>
+        <td>${escapeHtml(row.judge)}</td>
+        <td>${escapeHtml(row.group_number || '')}</td>
+        <td>${escapeHtml(row.project_title || '')}</td>
+        <td>${row.criteria1 ?? ''}</td>
+        <td>${row.criteria2 ?? ''}</td>
+        <td>${row.criteria3 ?? ''}</td>
+        <td>${row.criteria4 ?? ''}</td>
+        <td>${row.total ?? ''}</td>
+        <td>${escapeHtml(row.comments || '')}</td>
+      </tr>`;
 
-  html += "</table><br>";
+      if (!groupScores[row.group_number]) groupScores[row.group_number] = [];
+      groupScores[row.group_number].push(Number(row.total) || 0);
+    });
 
-  html += "<h3>Group Averages:</h3>";
+    html += `</tbody></table><div style="margin-top:12px">`;
 
-  for (let g in groupScores) {
-    const avg = groupScores[g].reduce((a,b)=>a+b,0) / groupScores[g].length;
-    html += `Group ${g}: <b>${avg.toFixed(2)}</b><br>`;
+    html += "<h3 style='margin:0 0 8px 0'>Group Averages</h3>";
+    Object.keys(groupScores).forEach(g=>{
+      const arr = groupScores[g];
+      const avg = arr.reduce((a,b)=>a+b,0) / (arr.length || 1);
+      html += `<div class="kv">Group ${escapeHtml(g)}: <strong>${avg.toFixed(2)}</strong></div>`;
+    });
+
+    html += "</div>";
+
+    document.getElementById("results").innerHTML = html;
+  } catch (err) {
+    document.getElementById("results").innerHTML = `<div class="kv">Error loading data: ${err.message}</div>`;
   }
-
-  document.getElementById("results").innerHTML = html;
 }
+
+/* small escape util to avoid XSS if DB contains weird content */
+function escapeHtml(s){
+  if(!s) return '';
+  return String(s)
+    .replaceAll('&','&amp;')
+    .replaceAll('<','&lt;')
+    .replaceAll('>','&gt;')
+    .replaceAll('"','&quot;')
+    .replaceAll("'",'&#39;');
+}
+
+window.addEventListener('load', loadData);
 </script>
-</head>
-<body onload="loadData()">
-
-<h2>Admin Results</h2>
-<a href="/logout" style="
-    display:inline-block;
-    margin-bottom:15px;
-    padding:8px 14px;
-    background:red;
-    color:white;
-    text-decoration:none;
-    border-radius:6px;
-">Log Out</a>
-
-  
-<div id="results"></div>
-
 </body>
 </html>
+
+
 
