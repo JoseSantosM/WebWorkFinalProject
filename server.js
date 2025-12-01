@@ -145,7 +145,15 @@ app.get("/admin/data", (req, res) => {
   });
 });
 
+app.get("/logout", (req, res) => {
+  req.session.destroy(() => {
+    res.redirect("/");
+  });
+});
+
+
 app.listen(3000, () => console.log("Server running on http://localhost:3000"));
+
 
 
 
