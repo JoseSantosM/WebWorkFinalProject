@@ -1,68 +1,90 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Grade Submission</title>
-<link rel="stylesheet" href="css/styles.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Submit Grades — Grading Dashboard</title>
+  <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-<h2>Computer Science Project Grading</h2>
+  <div class="app-wrap">
+    <div class="card header-row">
+      <div class="header-left">
+        <h1>Submit Grades</h1>
+        <div class="header-sub">Logged in as judge — submit one entry at a time</div>
+      </div>
+      <div style="display:flex; gap:8px;">
+        <a class="btn btn-ghost" href="/admin" title="Admin page (requires admin session)">Admin</a>
+        <a class="btn btn-danger" href="/logout">Log Out</a>
+      </div>
+    </div>
 
-<a href="/logout" style="
-    display:inline-block;
-    margin-bottom:15px;
-    padding:8px 14px;
-    background:red;
-    color:white;
-    text-decoration:none;
-    border-radius:6px;
-">Log Out</a>
+    <div class="card">
+      <form method="POST" action="/submitGrades">
+        <div style="display:flex; gap:12px; flex-wrap:wrap;">
+          <div style="flex:1; min-width:200px">
+            <label class="kv">Group Number</label>
+            <input class="input" name="group_number" type="text" placeholder="e.g. A1" required>
+          </div>
 
-<form method="POST" action="/submitGrades">
+          <div style="flex:2; min-width:220px">
+            <label class="kv">Project Title</label>
+            <input class="input" name="project_title" type="text" placeholder="Project title" required>
+          </div>
+        </div>
 
-<label>Group Number:</label>
-<input type="text" name="group_number" required><br>
+        <table class="form-table" aria-describedby="criteria-desc">
+          <caption id="criteria-desc" style="caption-side:top; text-align:left; padding-bottom:6px; color:var(--muted)">
+            Evaluate each criterion. Pick one radio per row.
+          </caption>
+          <thead>
+            <tr>
+              <th>Criteria</th>
+              <th>Developing (0–10)</th>
+              <th>Accomplished (11–15)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Articulate requirements</td>
+              <td><input type="radio" name="c1" value="10" required></td>
+              <td><input type="radio" name="c1" value="15"></td>
+            </tr>
+            <tr>
+              <td>Choose appropriate tools</td>
+              <td><input type="radio" name="c2" value="10" required></td>
+              <td><input type="radio" name="c2" value="15"></td>
+            </tr>
+            <tr>
+              <td>Clear oral presentation</td>
+              <td><input type="radio" name="c3" value="10" required></td>
+              <td><input type="radio" name="c3" value="15"></td>
+            </tr>
+            <tr>
+              <td>Functioned well as a team</td>
+              <td><input type="radio" name="c4" value="10" required></td>
+              <td><input type="radio" name="c4" value="15"></td>
+            </tr>
+          </tbody>
+        </table>
 
-<label>Project Title:</label>
-<input type="text" name="project_title" required><br><br>
+        <div style="margin-top:14px;">
+          <label class="kv">Comments (optional)</label>
+          <textarea name="comments" rows="4" class="input" placeholder="Short feedback..."></textarea>
+        </div>
 
-<table border="1">
-  <tr><th>Criteria</th><th>Developing (0–10)</th><th>Accomplished (11–15)</th></tr>
-
-  <tr>
-    <td>Articulate requirements</td>
-    <td><input type="radio" name="c1" value="10" required></td>
-    <td><input type="radio" name="c1" value="15"></td>
-  </tr>
-
-  <tr>
-    <td>Choose appropriate tools</td>
-    <td><input type="radio" name="c2" value="10" required></td>
-    <td><input type="radio" name="c2" value="15"></td>
-  </tr>
-
-  <tr>
-    <td>Clear oral presentation</td>
-    <td><input type="radio" name="c3" value="10" required></td>
-    <td><input type="radio" name="c3" value="15"></td>
-  </tr>
-
-  <tr>
-    <td>Functioned well as a team</td>
-    <td><input type="radio" name="c4" value="10" required></td>
-    <td><input type="radio" name="c4" value="15"></td>
-  </tr>
-</table>
-
-<br>
-<label>Comments:</label><br>
-<textarea name="comments"></textarea><br><br>
-
-<button type="submit">Submit Grades</button>
-</form>
-
+        <div class="form-actions" style="margin-top:18px;">
+          <div style="display:flex; gap:8px;">
+            <button type="submit" class="btn btn-primary">Submit Grades</button>
+            <a href="/grades" class="btn btn-ghost">Reset</a>
+          </div>
+          <div class="kv">Make sure one radio is selected per criterion.</div>
+        </div>
+      </form>
+    </div>
+  </div>
 </body>
 </html>
-
 
 
 
