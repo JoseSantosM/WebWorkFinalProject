@@ -1,70 +1,94 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Login</title>
-<link rel="stylesheet" href="css/styles.css">
-
-<style>
-  .toggle-buttons button {
-    padding: 10px 15px;
-    margin-right: 10px;
-    cursor: pointer;
-  }
-  .credentials-box {
-    background: #f5f5f5;
-    padding: 10px;
-    margin-top: 20px;
-    border-radius: 8px;
-    font-size: 14px;
-  }
-</style>
-
-<script>
-function switchLogin(type) {
-  const title = document.getElementById("loginTitle");
-  const form = document.getElementById("loginForm");
-  const btn = document.getElementById("submitBtn");
-
-  if (type === "judge") {
-    title.innerText = "Judge Login";
-    form.action = "/login"; // judge login
-    btn.innerText = "Login as Judge";
-  } else {
-    title.innerText = "Admin Login";
-    form.action = "/adminLogin"; // admin login
-    btn.innerText = "Login as Admin";
-  }
-}
-</script>
-
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Login — Grading Dashboard</title>
+  <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
+  <div class="app-wrap">
+    <div class="card header-row">
+      <div class="header-left">
+        <h1>Grading Dashboard</h1>
+        <div class="header-sub">Secure judge & admin access</div>
+      </div>
 
-<h2 id="loginTitle">Judge Login</h2>
+      <div>
+        <a class="btn btn-ghost" href="#" onclick="alert('Help: Use judge or admin credentials shown below.')">Help</a>
+      </div>
+    </div>
 
-<div class="toggle-buttons">
-  <button onclick="switchLogin('judge')">Judge Login</button>
-  <button onclick="switchLogin('admin')">Admin Login</button>
-</div>
+    <div class="login-grid">
+      <div class="hero card">
+        <h2>Welcome back</h2>
+        <p>Sign in with the account type you have been given. Judges should use judge accounts to submit scores; admin account shows results and averages.</p>
 
-<form id="loginForm" method="POST" action="/login">
-  <input type="text" name="username" placeholder="Username" required><br>
-  <input type="password" name="password" placeholder="Password" required><br>
-  <button type="submit" id="submitBtn">Login as Judge</button>
-</form>
+        <div class="credentials">
+          <div class="kv"><strong>Judge credentials</strong></div>
+          <div class="note">usernames: <span class="badge">judge1</span>, <span class="badge">judge2</span>, <span class="badge">judge3</span>, <span class="badge">judge4</span></div>
+          <div class="note">password: <span class="badge">password123</span></div>
 
-<div class="credentials-box">
-  <b>Judge Credentials:</b><br>
-  Username: judge1, judge2, judge3, judge4<br>
-  Password: <i>password123</i><br><br>
+          <hr style="border:none; height:8px; opacity:0;">
 
-  <b>Admin Credentials:</b><br>
-  Username: <i>admin</i><br>
-  Password: <i>admin123</i>
-</div>
+          <div class="kv"><strong>Admin</strong></div>
+          <div class="note">username: <span class="badge">admin</span></div>
+          <div class="note">password: <span class="badge">admin123</span></div>
+        </div>
+      </div>
 
+      <div class="form-box card">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <div class="kv">Sign in</div>
+            <div class="header-sub" style="margin-top:6px">Choose role and enter credentials</div>
+          </div>
+        </div>
+
+        <div class="toggle-buttons" style="margin-top:14px;">
+          <button id="btnJudge" class="toggle-btn active" onclick="switchLogin('judge'); return false;">Judge</button>
+          <button id="btnAdmin" class="toggle-btn" onclick="switchLogin('admin'); return false;">Admin</button>
+        </div>
+
+        <form id="loginForm" method="POST" action="/login" style="margin-top:8px;">
+          <label class="kv">Username</label>
+          <input class="input" name="username" type="text" placeholder="username" required>
+
+          <label class="kv">Password</label>
+          <input class="input" name="password" type="password" placeholder="password" required>
+
+          <div class="form-actions">
+            <div style="display:flex; gap:8px;">
+              <button type="submit" id="submitBtn" class="btn btn-primary">Login as Judge</button>
+              <a href="/" class="btn btn-ghost" onclick="document.querySelector('.input').value='';">Clear</a>
+            </div>
+            <a href="#" class="kv" onclick="alert('Contact the event coordinator for account issues.')">Need help?</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+<script>
+  function switchLogin(type){
+    const form = document.getElementById('loginForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const btnJudge = document.getElementById('btnJudge');
+    const btnAdmin = document.getElementById('btnAdmin');
+
+    if(type === 'admin'){
+      form.action = '/adminLogin';
+      submitBtn.textContent = 'Login as Admin';
+      btnAdmin.classList.add('active');
+      btnJudge.classList.remove('active');
+    } else {
+      form.action = '/login';
+      submitBtn.textContent = 'Login as Judge';
+      btnJudge.classList.add('active');
+      btnAdmin.classList.remove('active');
+    }
+  }
+</script>
 </body>
 </html>
-
-
 
