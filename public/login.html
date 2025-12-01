@@ -1,17 +1,67 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Judge Login</title>
+<title>Login</title>
 <link rel="stylesheet" href="css/styles.css">
+
+<style>
+  .toggle-buttons button {
+    padding: 10px 15px;
+    margin-right: 10px;
+    cursor: pointer;
+  }
+  .credentials-box {
+    background: #f5f5f5;
+    padding: 10px;
+    margin-top: 20px;
+    border-radius: 8px;
+    font-size: 14px;
+  }
+</style>
+
+<script>
+function switchLogin(type) {
+  const title = document.getElementById("loginTitle");
+  const form = document.getElementById("loginForm");
+  const btn = document.getElementById("submitBtn");
+
+  if (type === "judge") {
+    title.innerText = "Judge Login";
+    form.action = "/login"; // judge login
+    btn.innerText = "Login as Judge";
+  } else {
+    title.innerText = "Admin Login";
+    form.action = "/adminLogin"; // admin login
+    btn.innerText = "Login as Admin";
+  }
+}
+</script>
+
 </head>
 <body>
-<h2>Judge Login</h2>
 
-<form method="POST" action="/login">
+<h2 id="loginTitle">Judge Login</h2>
+
+<div class="toggle-buttons">
+  <button onclick="switchLogin('judge')">Judge Login</button>
+  <button onclick="switchLogin('admin')">Admin Login</button>
+</div>
+
+<form id="loginForm" method="POST" action="/login">
   <input type="text" name="username" placeholder="Username" required><br>
   <input type="password" name="password" placeholder="Password" required><br>
-  <button type="submit">Login</button>
+  <button type="submit" id="submitBtn">Login as Judge</button>
 </form>
+
+<div class="credentials-box">
+  <b>Judge Credentials:</b><br>
+  Username: judge1, judge2, judge3, judge4<br>
+  Password: <i>password123</i><br><br>
+
+  <b>Admin Credentials:</b><br>
+  Username: <i>admin</i><br>
+  Password: <i>admin123</i>
+</div>
 
 </body>
 </html>
