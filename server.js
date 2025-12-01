@@ -83,6 +83,18 @@ app.post("/login", (req, res) => {
   );
 });
 
+app.post("/adminLogin", (req, res) => {
+  const { username, password } = req.body;
+
+  // Hard-coded admin credentials
+  if (username === "admin" && password === "admin123") {
+    req.session.user = "ADMIN";
+    return res.redirect("/admin");
+  }
+
+  res.send("Invalid admin login <br><a href='/'>Try again</a>");
+});
+
 
 app.get("/grades", (req, res) => {
   if (!req.session.user) return res.redirect("/");
@@ -134,5 +146,6 @@ app.get("/admin/data", (req, res) => {
 });
 
 app.listen(3000, () => console.log("Server running on http://localhost:3000"));
+
 
 
