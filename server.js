@@ -83,6 +83,14 @@ app.post("/login", (req, res) => {
   );
 });
 
+// Admin-only middleware
+function requireAdmin(req, res, next) {
+  if (req.session.user !== "ADMIN") {
+    return res.status(403).send("Access denied. Admins only.<br><a href='/'>Back</a>");
+  }
+  next();
+}
+
 app.post("/adminLogin", (req, res) => {
   const { username, password } = req.body;
 
@@ -134,12 +142,11 @@ app.post("/submitGrades", (req, res) => {
 });
 
 
-app.get("/admin", (req, res) => {
+app.get("/admin", requireAdmin, (req, res) => {
   res.sendFile(path.join(__dirname, "/public/admin.html"));
 });
 
-
-app.get("/admin/data", (req, res) => {
+app.get("/admin/data", requireAdmin, (req, res) => {
   db.all("SELECT * FROM grades", (err, rows) => {
     res.json(rows);
   });
@@ -153,6 +160,7 @@ app.get("/logout", (req, res) => {
 
 
 app.listen(3000, () => console.log("Server running on http://localhost:3000"));
+
 
 
 
